@@ -1,14 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <funct1.h>
+#include <fcnt1.h>
 #include <pthread.h>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/ipc.h>
+#include <sys/stat.h>
 #define RIO_BUFSIZE 8192
 #define MAXLINE 8192
 #define MAXBUF 8192
@@ -61,4 +63,26 @@ void rio_readinitb(rio_t *rp,int fd)
 rp->rio_fd=fd;
 rp->rio_cnt=0;
 rp->rio_bufptr=rp->rio_buf;
+}
+static ssize_t rio_read(rio_t *rp,char *usrbuf,size_t n)
+{
+int cnt;
+while(rp->rio_cnt<=0){
+rp->rio_cnt=read(rp->rio_fd,rp->rio_buf,sizeof(rp->rio_buf));
+ if (rp->rio_cnt < 0) {
+        if (errno != EINTR)
+        return -1;
+    }
+    else if (rp->rio_cnt == 0)
+        return 0;
+    else 
+        rp->rio_bufptr = rp->rio_buf;
+}
+    cnt = n;          
+    if (rp->rio_cnt < n)   
+    cnt = rp->rio_cnt;
+    memcpy(usrbuf, rp->rio_bufptr, cnt);
+    rp->rio_bufptr += cnt;
+    rp->rio_cnt -= cnt;
+    return cnt;
 }
