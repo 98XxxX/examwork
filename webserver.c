@@ -100,3 +100,25 @@ char *bufp=usrbuf;
     }
     return (n - nleft); 
 }
+ssize_t rio_readlineb(rio_t *rp,void *usrbuf,size_t maxlen)
+{
+int n, rc;
+char c,*bufp=usrbuf;
+ for (n = 1; n < maxlen; n++) { 
+        if ((rc = rio_read(rp, &c, 1)) == 1) {
+        *bufp++ = c;
+        if (c == '\n') {
+                n++;
+            break;
+            }
+    } else if (rc == 0) {
+        if (n == 1)
+        return 0; //第一次读取就到了EOF
+        else
+        break;    //读了一些数据后遇到EOF
+    } else
+        return -1;    /* Error */
+    }
+    *bufp = 0;
+    return n-1;
+}
