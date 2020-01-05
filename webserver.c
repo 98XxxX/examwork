@@ -217,3 +217,13 @@ char buf[MAXLINE],body[MAXBUF];
     rio_writen(fd, buf, strlen(buf));
     rio_writen(fd, body, strlen(body));
 }
+void read_requesthdrs(rio_t *rp) 
+{
+    char buf[MAXLINE];
+    rio_readlineb(rp, buf, MAXLINE);
+    while(strcmp(buf, "\r\n")) {
+	    printf("%s", buf);
+	    rio_readlineb(rp, buf, MAXLINE);
+    }
+    return;
+}
