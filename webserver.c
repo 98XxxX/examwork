@@ -122,3 +122,21 @@ char c,*bufp=usrbuf;
     *bufp = 0;
     return n-1;
 }
+int open_listen_sock(int port)
+{
+int listen_sock,optval=1;
+struct sockaddr_in serveraddr;
+if((listen_sock=socket(AF_INET,SOCK_STREAM,0))<0) return -1;
+if(setsockopt(listen_sock,SOL_SOCKET,SO_REUSEADDR,(const void *)&optval,sizeof(int))<0)
+return-1;
+bzero((char *)&serveraddr,sizeof(serveraddr));
+serveraddr.sin_family=AF_INET;
+serveraddr.sin_addr.s_addr=htonl(INADDR_ANY);
+serveraddr.sin_addr.s_addr=htonl(INADDR_ANY);
+serveraddr.sin_port=htons((unsigned short)port);
+if(bind(listen_sock,(SA *)&serveraddr,sizeof(serveraddr))<0)
+return -1;
+if(listen(listen_sock,LISTENQ)<0)
+return -1;
+return listen_sock;
+}
