@@ -113,11 +113,11 @@ char c,*bufp=usrbuf;
             }
     } else if (rc == 0) {
         if (n == 1)
-        return 0; //第一次读取就到了EOF
+        return 0; 
         else
-        break;    //读了一些数据后遇到EOF
+        break;  
     } else
-        return -1;    /* Error */
+        return -1;
     }
     *bufp = 0;
     return n-1;
@@ -150,3 +150,47 @@ void feed_static(int fd, char *filename, int filesize);
 void get_filetype(char *filename, char *filetype);
 void feed_dynamic(int fd, char *filename, char *cgiargs);
 void error_request(int fd, char *cause, char *errnum,char *shortmsg, char *description);
+void process_trans(int fd)
+{
+    int static_flag;
+    struct stat sbuf;
+    char buf[MAXLINE], method[MAXLINE], uri[MAXLINE], version[MAXLINE];
+    char filename[MAXLINE], cgiargs[MAXLINE];
+    rio_t rio;
+    rio_readinitb(&rio, fd);
+    rio_readlineb(&rio, buf, MAXLINE);
+    sscanf(buf, "%s %s %s", method, uri, version);
+    if (strcasecmp(method, "GET")) {
+       error_request(fd, method, "501", "Not Implemented",
+                "weblet does not implement this method");
+       return;
+    }
+    read_requesthdrs(&rio);
+    static_flag=is_static(uri);
+    if(static_flag)
+        parse_static_uri(uri, filename);
+    else
+        parse_dynamic_uri(uri, filename, cgiargs);
+
+    if (stat(filename, &sbuf) < 0) {
+	    error_request(fd, filename, "404", "Not found",
+		    "weblet could not find this file");
+	    return;
+    }
+    if (static_flag) { 
+	    if (!(S_ISREG(sbuf.st_mode)) || !(S_IRUSR & sbuf.st_mode)) {
+	       error_request(fd, filename, "403", "Forbidden",
+			    "weblet is not permtted to read the file");
+	        return;
+	    }
+	    feed_static(fd, filename, sbuf.st_size);
+    }
+    else { 
+	    if (!(S_ISREG(sbuf.st_mode)) || !(S_IXUSR & sbuf.st_mode)) {
+	        error_request(fd, filename, "403", "Forbidden",
+			"weblet could not run the CGI program");
+	        return;
+	    }
+	    feed_dynamic(fd, filename, cgiargs);
+    }
+}
