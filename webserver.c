@@ -194,3 +194,10 @@ void process_trans(int fd)
 	    feed_dynamic(fd, filename, cgiargs);
     }
 }
+int is_static(char *uri)
+{
+   if(!strstr(uri,"cgi-bin"))
+	   return 1;
+   else
+	   return 0;
+}
