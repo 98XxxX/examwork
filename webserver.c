@@ -252,7 +252,7 @@ void feed_static(int fd,char *fileName,int filesize)
     int sfd;
     char *srcp,filetype[MAXLINE],buf[MAXBUF];
     //向客户端发送响应头部
-    get_filetype(filename, filetype);
+    get_filetype(filename, filetype);   //获取文件的类型
     sprintf(buf, "HTTP/1.0 200 OK\r\n");
     sprintf(buf, "%sServer: webserver Web Server\r\n", buf);
     sprintf(buf, "%sContent-length: %d\r\n", buf, filesize);
@@ -264,5 +264,16 @@ void feed_static(int fd,char *fileName,int filesize)
     close(sfd);
     rio_writen(fd, srcp, filesize);
     munmap(srcp, filesize);
+}
+void get_filetype(char *filename, char *filetype)
+{
+    if (strstr(filename, ".html"))             //判断.html是否在文件名里面
+                strcpy(filetype, "text/html");
+        else if (strstr(filename, ".jpg"))     //判断.jpg是否在文件名里面
+                strcpy(filetype, "image/jpeg");
+        else if (strstr(filename, ".mpeg"))    //判断.mpeg是否在文件名里面
+            strcpy(filename, "video/mpeg");
+        else
+            strcpy(filetype, "text/html");
 }
 
