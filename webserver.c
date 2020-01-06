@@ -12,6 +12,7 @@
 #include <sys/ipc.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
+#include <errno.h>
 #define RIO_BUFSIZE 8192
 #define MAXLINE 8192
 #define MAXBUF 8192
