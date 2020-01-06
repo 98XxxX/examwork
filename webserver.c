@@ -290,11 +290,29 @@ void feed_dynamic(int fd, char *filename, char *cgiargs)
             close(pfd[1]);                   //关闭管道写端pfd[1]
             dup2(pfd[0],STDIN_FILENO);       //将读端pfd[0]重定向为子进程的标准输入
             dup2(fd, STDOUT_FILENO);         //把与套接字描述符fd重定向为子进程的标准输出
-            execve(filename, emptylist, environ);    //加载cgi程序
+            execve(filename, emptylist, NULL);    //加载cgi程序
         }
         close(pfd[0]);                       //关闭读端
         write(pfd[1],cgiargs,strlen(cgiargs)+1);  //将cgiargs中保存的CGI参数写入管道
         wait(NULL);                              //等待dgi进程结束并回收
         close(pfd[1]);                           //关闭管道写端
 }
+int main(int argc, char **argv)
+{
+    int listen_sock, conn_sock, port, clientlen;
+    struct sockaddr_in clientaddr;
+    //判断是否给出响应的端口号
+    if (argc!=2) {
+       fprintf(stderr, "usage: %s <port>\n",argv[0]);
+       exit(1);
+       }
+    port=atoi(argv[1]); //把端口号转换成整型
+    listen_sock=open_listen_sock(port);           //打开一个监听套接字
+        while(1){                                 //循环接受连接请求
+                clientlen=sizeof(clientaddr);
+                conn_sock=accept(listen_sock,(SA *)&clientaddr,&clientlen);
+                process_trans(conn_sock);
+                close(conn_sock);                    //关闭连接
+        }
 
+}
