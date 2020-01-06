@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>CGI Testing</title>
+</head>
+<body>
+<table width="200" height="180" border="0" style="font-size:12px">
+<tr><td>
+<div style="font-weight:bold; font-size:15px">Method: GET</div>
+<div>please input two number:<div>
+<form method="get" action="./cgi-bin/get">
+<input type="txt" size="3" name="a">+
+<input type="txt" size="3" name="b">=
+<input type="submit" value="sum">
+</form>
+</td></tr>
+<tr><td>
+<div style="font-weight:bold; font-size:15px">Method: POST</div>
+<div>please input two number:<div>
+<form method="post" action="./cgi-bin/post">
+<input type="txt" size="3" name="m">*
+<input type="txt" size="3" name="n">=
+<input type="submit" value="resu">
+</form>
+</td></tr>
+<tr><td><inputtype="button" value="Back Home"οnclick='javascript:window.location="./index.html"'></td></tr>
+</table>
+</body>
+</html>
