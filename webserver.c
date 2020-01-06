@@ -276,4 +276,25 @@ void get_filetype(char *filename, char *filetype)
         else
             strcpy(filetype, "text/html");
 }
+void feed_dynamic(int fd, char *filename, char *cgiargs)
+{
+    char buf[MAXLINE],*emptylist[]={NULL};
+    int pfd[2];
+    //返回http响应的第一部分
+    sprintf(buf, "HTTP/1.0 200 OK\r\n");
+    rio_writen(fd, buf, strlen(buf));
+    sprintf(buf, "Server: webserver Web Server\r\n");
+    rio_writen(fd, buf, strlen(buf));
+    pipe(pfd);
+        if (fork()==0){
+            close(pfd[1]);                   //关闭管道写端pfd[1]
+            dup2(pfd[0],STDIN_FILENO);       //将读端pfd[0]重定向为子进程的标准输入
+            dup2(fd, STDOUT_FILENO);         //把与套接字描述符fd重定向为子进程的标准输出
+            execve(filename, emptylist, environ);    //加载cgi程序
+        }
+        close(pfd[0]);                       //关闭读端
+        write(pfd[1],cgiargs,strlen(cgiargs)+1);  //将cgiargs中保存的CGI参数写入管道
+        wait(NULL);                              //等待dgi进程结束并回收
+        close(pfd[1]);                           //关闭管道写端
+}
 
