@@ -313,7 +313,6 @@ int main(int argc, char **argv)
     int listen_sock, *conn_sock, port, clientlen;
     struct sockaddr_in clientaddr;
     pthread_t tid;
-    struct sockaddr_in clientaddr;
 
     //判断是否给出响应的端口号
     if (argc!=2) {
