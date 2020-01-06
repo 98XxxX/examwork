@@ -300,10 +300,21 @@ void feed_dynamic(int fd, char *filename, char *cgiargs)
         wait(NULL);                              //等待dgi进程结束并回收
         close(pfd[1]);                           //关闭管道写端
 }
+void *serve_client(void *vargp){
+int conn_sock=*((int *)vargp);
+pthread_detach(pthread_self());
+free(vargp);
+process_trans(conn_sock);
+close(conn_sock);
+return NULL;
+}
 int main(int argc, char **argv)
 {
-    int listen_sock, conn_sock, port, clientlen;
+    int listen_sock, *conn_sock, port, clientlen;
     struct sockaddr_in clientaddr;
+    pthread_t tid;
+    struct sockaddr_in clientaddr;
+
     //判断是否给出响应的端口号
     if (argc!=2) {
        fprintf(stderr, "usage: %s <port>\n",argv[0]);
@@ -313,9 +324,9 @@ int main(int argc, char **argv)
     listen_sock=open_listen_sock(port);           //打开一个监听套接字
         while(1){                                 //循环接受连接请求
                 clientlen=sizeof(clientaddr);
-                conn_sock=accept(listen_sock,(SA *)&clientaddr,&clientlen);
-                process_trans(conn_sock);
-                close(conn_sock);                    //关闭连接
+                conn_sock=malloc(sizeof(int));
+                *conn_sock=accept(listen_sock,(SA *)&clientaddr,&clientlen);
+               pthread_create(&tid,NULL,serve_client,conn_sock);
         }
 
 }
