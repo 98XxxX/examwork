@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <fcnt1.h>
+#include <fcntl.h>
 #include <pthread.h>
 #include <sys/socket.h>
 #include <netdb.h>
