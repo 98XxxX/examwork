@@ -26,6 +26,7 @@ char rio_buf[RIO_BUFSIZE];
 ssize_t rio_readn(int fd,void *usrbuf,size_t n){
 size_t nleft=n;
 ssize_t nread;
+typedef struct sockaddr SA;
 char *bufp=usrbuf;
 while(nleft>0){
 if((nread=read(fd,bufp,nleft))<0){
