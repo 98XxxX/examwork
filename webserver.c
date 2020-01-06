@@ -124,6 +124,7 @@ char c,*bufp=usrbuf;
     *bufp = 0;
     return n-1;
 }
+/*服务器通过调用这个函数返回一个监听描述符*/
 int open_listen_sock(int port)
 {
 int listen_sock,optval=1;
