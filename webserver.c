@@ -11,12 +11,11 @@
 #include <arpa/inet.h>
 #include <sys/ipc.h>
 #include <sys/stat.h>
+#include <sys/mman.h>
 #define RIO_BUFSIZE 8192
 #define MAXLINE 8192
 #define MAXBUF 8192
 #define LISTENQ 1024
-extern int h_errno;
-extern char **environ;
 typedef struct{
 int rio_fd;
 int rio_cnt;
@@ -148,7 +147,7 @@ void parse_static_uri(char *uri, char *filename);
 void parse_dynamic_uri(char *uri, char *filename, char *cgiargs);
 void feed_static(int fd, char *filename, int filesize);
 void get_filetype(char *filename, char *filetype);
-void feed_dynamic(int fd, char *filename, char *cgiargs);
+void feed_dynamic(int fd, char *fileName, char *cgiargs);
 void error_request(int fd, char *cause, char *errnum,char *shortmsg, char *description);
 void process_trans(int fd)
 {
@@ -248,3 +247,22 @@ void parse_dynamic_uri(char *uri, char *filename, char *cgiargs)
     strcpy(filename, ".");
     strcat(filename, uri);
 }
+void feed_static(int fd,char *fileName,int filesize)
+{
+    int sfd;
+    char *srcp,filetype[MAXLINE],buf[MAXBUF];
+    //向客户端发送响应头部
+    get_filetype(filename, filetype);
+    sprintf(buf, "HTTP/1.0 200 OK\r\n");
+    sprintf(buf, "%sServer: webserver Web Server\r\n", buf);
+    sprintf(buf, "%sContent-length: %d\r\n", buf, filesize);
+    sprintf(buf, "%sContent-type: %s\r\n\r\n", buf, filetype);
+    rio_writen(fd, buf, strlen(buf));
+    //向服务端发送响应的内容
+    sfd = open(fileName, O_RDONLY, 0);
+    srcp = mmap(0, filesize, PROT_READ, MAP_PRIVATE, sfd, 0);
+    close(sfd);
+    rio_writen(fd, srcp, filesize);
+    munmap(srcp, filesize);
+}
+
