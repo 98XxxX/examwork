@@ -13,6 +13,7 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <errno.h>
+#include <sys/wait.h>
 #define RIO_BUFSIZE 8192
 #define MAXLINE 8192
 #define MAXBUF 8192
@@ -23,10 +24,10 @@ int rio_cnt;
 char *rio_bufptr;
 char rio_buf[RIO_BUFSIZE];
 }rio_t;
+typedef struct sockaddr SA;
 ssize_t rio_readn(int fd,void *usrbuf,size_t n){
 size_t nleft=n;
 ssize_t nread;
-typedef struct sockaddr SA;
 char *bufp=usrbuf;
 while(nleft>0){
 if((nread=read(fd,bufp,nleft))<0){
@@ -254,7 +255,7 @@ void feed_static(int fd,char *fileName,int filesize)
     int sfd;
     char *srcp,filetype[MAXLINE],buf[MAXBUF];
     //向客户端发送响应头部
-    get_filetype(filename, filetype);   //获取文件的类型
+    get_filetype(fileName, filetype);   //获取文件的类型
     sprintf(buf, "HTTP/1.0 200 OK\r\n");
     sprintf(buf, "%sServer: webserver Web Server\r\n", buf);
     sprintf(buf, "%sContent-length: %d\r\n", buf, filesize);
