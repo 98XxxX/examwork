@@ -240,6 +240,9 @@ void read_requesthdrs(rio_t *rp)
     while(strcmp(buf, "\r\n")) {
 	    printf("%s", buf);
 	    rio_readlineb(rp, buf, MAXLINE);
+            if(strstr(buf,"Content-Length:"))
+            content_length = atoi(&(buf[16]));
+
     }
     return;
 }
