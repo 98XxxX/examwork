@@ -153,6 +153,7 @@ void feed_static(int fd, char *filename, int filesize);
 void get_filetype(char *filename, char *filetype);
 void feed_dynamic(int fd, char *fileName, char *cgiargs);
 void error_request(int fd, char *cause, char *errnum,char *shortmsg, char *description);
+/*http处理函数*/
 void process_trans(int fd)
 {
     int static_flag;
