@@ -309,7 +309,9 @@ void feed_dynamic(int fd, char *filename, char *cgiargs)
         write(pfd[1],cgiargs,strlen(cgiargs)+1);  //将cgiargs中保存的CGI参数写入管道
         wait(NULL);                              //等待dgi进程结束并回收
         close(pfd[1]);                           //关闭管道写端
+
 }
+/*线程函数执行http处理函数和分离线程*/
 void *serve_client(void *vargp){
 int conn_sock=*((int *)vargp);
 pthread_detach(pthread_self());
