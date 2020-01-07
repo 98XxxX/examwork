@@ -237,6 +237,7 @@ int read_requesthdrs(rio_t *rp)
 {
     char buf[MAXLINE];
     rio_readlineb(rp, buf, MAXLINE);
+    int content_length=0;
     while(strcmp(buf, "\r\n")) {
 	    printf("%s", buf);
 	    rio_readlineb(rp, buf, MAXLINE);
