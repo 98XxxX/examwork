@@ -233,7 +233,7 @@ char buf[MAXLINE],body[MAXBUF];
     rio_writen(fd, body, strlen(body));
 }
 /*读取其他请求报头*/
-void read_requesthdrs(rio_t *rp) 
+int read_requesthdrs(rio_t *rp)
 {
     char buf[MAXLINE];
     rio_readlineb(rp, buf, MAXLINE);
