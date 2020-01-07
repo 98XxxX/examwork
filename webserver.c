@@ -242,7 +242,9 @@ void parse_static_uri(char *uri,char *filename)
     strcat(filename,uri);
     if(uri[strlen(uri)-1]=='/')
     strcat(filename,"home.html");
+
 }
+/*解析动态请求URL*/
 void parse_dynamic_uri(char *uri, char *filename, char *cgiargs)
 {
     char *ptr;
@@ -256,6 +258,7 @@ void parse_dynamic_uri(char *uri, char *filename, char *cgiargs)
     strcpy(filename, ".");
     strcat(filename, uri);
 }
+/*实现静态网页功能*/
 void feed_static(int fd,char *fileName,int filesize)
 {
     int sfd;
