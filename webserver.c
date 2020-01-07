@@ -197,7 +197,9 @@ void process_trans(int fd)
 	    }
 	    feed_dynamic(fd, filename, cgiargs);
     }
+
 }
+/*判断是否是静态请求还是动态请求*/
 int is_static(char *uri)
 {
    if(!strstr(uri,"cgi-bin"))
