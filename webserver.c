@@ -149,7 +149,7 @@ void read_requesthdrs(rio_t *rp);//读取其他请求头的函数声明
 int is_static(char *uri);//判断是静态请求还是动态请求的函数声明
 void parse_static_uri(char *uri, char *filename);//解析静态请求URL函数声明
 void parse_dynamic_uri(char *uri, char *filename, char *cgiargs);//解析动态请求URL函数声明
-void feed_static(int fd, char *filename, int filesize);
+void feed_static(int fd, char *filename, int filesize);//实现静态页面函数声明
 void get_filetype(char *filename, char *filetype);
 void feed_dynamic(int fd, char *fileName, char *cgiargs);
 void error_request(int fd, char *cause, char *errnum,char *shortmsg, char *description);
