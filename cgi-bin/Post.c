@@ -3,7 +3,6 @@
 #include <string.h>
 int main(void)
 {
-char *buf,*p;
 char content[4096];
 int m=0;
 int n=0;
