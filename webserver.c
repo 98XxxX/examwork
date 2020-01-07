@@ -314,6 +314,7 @@ void feed_dynamic(int fd, char *filename, char *cgiargs)
         close(pfd[1]);                           //关闭管道写端
 
 }
+/*实现动态页面响应POST请求函数声明*/
 void feed_dynamic_post_uri(int fd,char filename,int content_length,char *postmessage)
 {
 	char buf[Maxline],*emptylist[]={NULL};
