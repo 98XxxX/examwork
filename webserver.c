@@ -288,6 +288,7 @@ void get_filetype(char *filename, char *filetype)
         else
             strcpy(filetype, "text/html");
 }
+/*实现动态页面响应GET请求*/
 void feed_dynamic(int fd, char *filename, char *cgiargs)
 {
     char buf[MAXLINE],*emptylist[]={NULL};
