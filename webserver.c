@@ -153,6 +153,7 @@ void feed_static(int fd, char *filename, int filesize);
 void get_filetype(char *filename, char *filetype);
 void feed_dynamic(int fd, char *fileName, char *cgiargs);
 void error_request(int fd, char *cause, char *errnum,char *shortmsg, char *description);
+void parse_dynamic_post_uri(int fd,char filename,int content_length,char *postmessage);
 /*http处理函数*/
 void process_trans(int fd)
 {
@@ -307,8 +308,36 @@ void feed_dynamic(int fd, char *filename, char *cgiargs)
         }
         close(pfd[0]);                       //关闭读端
         write(pfd[1],cgiargs,strlen(cgiargs)+1);  //将cgiargs中保存的CGI参数写入管道
-        wait(NULL);                              //等待dgi进程结束并回收
+        wait(NULL);                              //等待cgi进程结束并回收
         close(pfd[1]);                           //关闭管道写端
+
+}
+void parse_dynamic_post_uri(int fd,char filename,int content_length,char *postmessage)
+{
+	char buf[Maxline],*emptylist[]={NULL};
+	int pfd[2];
+	//返回http响应的第一部分
+	sprintf(buf,"HTTP/1.0 200 OK\r\n");
+	rio_writen();
+	sprintf(buf, "Server: weblet Web Server\r\n");
+        rio_writen(fd, buf, strlen(buf));
+        pipe(pfd);
+	if (fork() == 0) {             //子进程
+        close(pfd[1]);                //关闭管道写端pfd[1]
+        dup2(pfd[0],STDIN_FILENO);   //将读端pfd[0]重定向为子进程的标准输入
+        dup2(fd, STDOUT_FILENO);     //把与套接字描述符fd重定向为子进程的标准输出
+        execve(filename, emptylist, environ);  //加载cgi程序
+
+    }
+    close(pfd[0]);     //关闭读端
+    recv(fd, postmessage, content_length, 0); //将cgiargs中保存的CGI参数写入管道
+    /*把 POST 数据写入 pfd，现在重定向到 STDIN */
+    write(pfd[1], postmessage, strlen(postmessage)+1);
+    wait(NULL);                          //等待cgi进程结束并回收
+    close(pfd[1]);                       //关闭管道写端
+
+
+
 
 }
 /*线程函数执行http处理函数和分离线程*/
@@ -340,5 +369,6 @@ int main(int argc, char **argv)
                 *conn_sock=accept(listen_sock,(SA *)&clientaddr,&clientlen);
                pthread_create(&tid,NULL,serve_client,conn_sock);
         }
+
 
 }
