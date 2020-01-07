@@ -208,6 +208,7 @@ int is_static(char *uri)
    else
 	   return 0;
 }
+/*生成错误提示页面*/
 void error_request(int fd, char *cause, char *errnum,char *shortmsg, char *description)
 {
 char buf[MAXLINE],body[MAXBUF];
