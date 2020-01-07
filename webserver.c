@@ -204,7 +204,7 @@ void process_trans(int fd)
 			"weblet could not run the CGI program");
 	        return;
 	    }
-	    feed_dynamic(fd, filename, cgiargs);
+	    feed_dynamic_get_uri(fd, filename, cgiargs);
     }
 
 }
