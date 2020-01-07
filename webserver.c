@@ -234,6 +234,7 @@ void read_requesthdrs(rio_t *rp)
     }
     return;
 }
+/*解析静态请求URL*/
 void parse_static_uri(char *uri,char *filename)
 {
     char *ptr;
