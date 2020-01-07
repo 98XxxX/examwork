@@ -161,6 +161,7 @@ void process_trans(int fd)
     struct stat sbuf;
     char buf[MAXLINE], method[MAXLINE], uri[MAXLINE], version[MAXLINE];
     char filename[MAXLINE], cgiargs[MAXLINE];
+    char posstmessage[MAXLINE];
     rio_t rio;
     rio_readinitb(&rio, fd);
     rio_readlineb(&rio, buf, MAXLINE);
@@ -340,7 +341,7 @@ void feed_dynamic_post_uri(int fd,char filename,int content_length,char *postmes
         close(pfd[1]);                //关闭管道写端pfd[1]
         dup2(pfd[0],STDIN_FILENO);   //将读端pfd[0]重定向为子进程的标准输入
         dup2(fd, STDOUT_FILENO);     //把与套接字描述符fd重定向为子进程的标准输出
-        execve(filename, emptylist, environ);  //加载cgi程序
+        execve(filename, emptylist, NULL);  //加载cgi程序
 
     }
     close(pfd[0]);     //关闭读端
