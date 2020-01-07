@@ -245,7 +245,7 @@ int read_requesthdrs(rio_t *rp)
             content_length = atoi(&(buf[16]));
 
     }
-    return;
+    return content_length;
 }
 /*解析静态请求URL*/
 void parse_static_uri(char *uri,char *filename)
