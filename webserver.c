@@ -145,7 +145,7 @@ return listen_sock;
 }
 typedef struct sockaddr SA;
 void process_trans(int fd);//http处理函数声明
-void read_requesthdrs(rio_t *rp);
+void read_requesthdrs(rio_t *rp);//读取其他请求头的函数声明
 int is_static(char *uri);
 void parse_static_uri(char *uri, char *filename);
 void parse_dynamic_uri(char *uri, char *filename, char *cgiargs);
