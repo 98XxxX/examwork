@@ -153,7 +153,7 @@ void feed_static(int fd, char *filename, int filesize);//实现静态页面函�
 void get_filetype(char *filename, char *filetype);//从文件名派生文件类型函数声明
 void feed_dynamic_get_uri(int fd, char *fileName, char *cgiargs);//实现动态页面响应GET请求函数声明
 void error_request(int fd, char *cause, char *errnum,char *shortmsg, char *description);//生成错误提示页面
-void feed_dynamic_post_uri(int fd,char filename,int content_length,char *postmessage);//实现动态页面响应POST请求函数声明
+void feed_dynamic_post_uri(int fd,char *filename,int content_length,char *postmessage);//实现动态页面响应POST请求函数声明
 /*http处理函数*/
 void process_trans(int fd)
 {
