@@ -150,7 +150,7 @@ int is_static(char *uri);//判断是静态请求还是动态请求的函数声�
 void parse_static_uri(char *uri, char *filename);//解析静态请求URL函数声明
 void parse_dynamic_uri(char *uri, char *filename, char *cgiargs);//解析动态请求URL函数声明
 void feed_static(int fd, char *filename, int filesize);//实现静态页面函数声明
-void get_filetype(char *filename, char *filetype);//
+void get_filetype(char *filename, char *filetype);//从文件名派生文件类型函数声明
 void feed_dynamic(int fd, char *fileName, char *cgiargs);
 void error_request(int fd, char *cause, char *errnum,char *shortmsg, char *description);
 void parse_dynamic_post_uri(int fd,char filename,int content_length,char *postmessage);
