@@ -5,7 +5,8 @@ int main(void)
 {
 char *buf,*p;
 char content[4096];
-int m,int n;
+int m=0;
+int n=0;
 scanf("m=%d&n=%d", &m, &n);
 sprintf(content, "This is Post\r\n: ");
 sprintf(content, "%sThe answer is: %d *%d = %d\r\n<p>", content, m,n,m*n);
