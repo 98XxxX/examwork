@@ -170,13 +170,20 @@ void process_trans(int fd)
                 "weblet does not implement this method");
        return;
     }
-    read_requesthdrs(&rio);
+    int content_length;
+    content_length=read_requesthdrs(&rio);
     static_flag=is_static(uri);
     if(static_flag)
         parse_static_uri(uri, filename);
-    else
-        parse_dynamic_uri(uri, filename, cgiargs);
+    else {
+        if (strcasecmp(method, "GET")==0) {
+         parse_dynamic_uri(uri, filename, cgiargs);
+        }
+        if (strcasecmp(method, "POST")==0) {
+         feed_dynamic_post_uri(fd, filename, content_length,posstmessage);
+        }
 
+   }
     if (stat(filename, &sbuf) < 0) {
 	    error_request(fd, filename, "404", "Not found",
 		    "weblet could not find this file");
