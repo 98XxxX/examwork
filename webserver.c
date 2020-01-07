@@ -320,6 +320,7 @@ process_trans(conn_sock);
 close(conn_sock);
 return NULL;
 }
+/*主函数*/
 int main(int argc, char **argv)
 {
     int listen_sock, *conn_sock, port, clientlen;
