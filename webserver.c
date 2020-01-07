@@ -329,7 +329,7 @@ void feed_dynamic_get_uri(int fd, char *filename, char *cgiargs)
 /*实现动态页面响应POST请求函数声明*/
 void feed_dynamic_post_uri(int fd,char filename,int content_length,char *postmessage)
 {
-	char buf[Maxline],*emptylist[]={NULL};
+	char buf[MAXLINE],*emptylist[]={NULL};
 	int pfd[2];
 	//返回http响应的第一部分
 	sprintf(buf,"HTTP/1.0 200 OK\r\n");
