@@ -161,7 +161,7 @@ void process_trans(int fd)
     struct stat sbuf;
     char buf[MAXLINE], method[MAXLINE], uri[MAXLINE], version[MAXLINE];
     char filename[MAXLINE], cgiargs[MAXLINE];
-    char posstmessage[MAXLINE];
+    char postmessage[MAXLINE];
     rio_t rio;
     rio_readinitb(&rio, fd);
     rio_readlineb(&rio, buf, MAXLINE);
@@ -202,7 +202,7 @@ void process_trans(int fd)
 
 	   
         if (strcasecmp(method, "POST")==0) {
-         feed_dynamic_post_uri(fd, filename, content_length,posstmessage);
+         feed_dynamic_post_uri(fd, filename, content_length,postmessage);
         }
     }
 
