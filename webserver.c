@@ -333,7 +333,7 @@ void feed_dynamic_post_uri(int fd,char filename,int content_length,char *postmes
 	int pfd[2];
 	//返回http响应的第一部分
 	sprintf(buf,"HTTP/1.0 200 OK\r\n");
-	rio_writen();
+	rio_writen(fd, buf, strlen(buf));
 	sprintf(buf, "Server: weblet Web Server\r\n");
         rio_writen(fd, buf, strlen(buf));
         pipe(pfd);
