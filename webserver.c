@@ -166,11 +166,6 @@ void process_trans(int fd)
     rio_readinitb(&rio, fd);
     rio_readlineb(&rio, buf, MAXLINE);
     sscanf(buf, "%s %s %s", method, uri, version);
-    if (strcasecmp(method, "GET")) {
-       error_request(fd, method, "501", "Not Implemented",
-                "weblet does not implement this method");
-       return;
-    }
     int content_length;
     content_length=read_requesthdrs(&rio);
     static_flag=is_static(uri);
