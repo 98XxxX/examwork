@@ -179,13 +179,13 @@ void process_trans(int fd)
    }
     if (stat(filename, &sbuf) < 0) {
 	    error_request(fd, filename, "404", "Not found",
-		    "weblet could not find this file");
+                    "webserver could not find this file");
 	    return;
     }
     if (static_flag) { 
 	    if (!(S_ISREG(sbuf.st_mode)) || !(S_IRUSR & sbuf.st_mode)) {
 	       error_request(fd, filename, "403", "Forbidden",
-			    "weblet is not permtted to read the file");
+                            "webserver is not permtted to read the file");
 	        return;
 	    }
 	    feed_static(fd, filename, sbuf.st_size);
@@ -193,7 +193,7 @@ void process_trans(int fd)
     else { 
 	    if (!(S_ISREG(sbuf.st_mode)) || !(S_IXUSR & sbuf.st_mode)) {
 	        error_request(fd, filename, "403", "Forbidden",
-			"weblet could not run the CGI program");
+                        "webserver could not run the CGI program");
 	        return;
 	    }
         if (strcasecmp(method, "GET")==0) {
