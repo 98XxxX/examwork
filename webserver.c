@@ -172,12 +172,9 @@ void process_trans(int fd)
     if(static_flag)
         parse_static_uri(uri, filename);
     else {
-        if (strcasecmp(method, "GET")==0) {
-         parse_dynamic_uri(uri, filename, cgiargs);
-        }
-        if (strcasecmp(method, "POST")==0) {
-         feed_dynamic_post_uri(fd, filename, content_length,posstmessage);
-        }
+  parse_dynamic_uri(uri, filename, cgiargs);
+
+
 
    }
     if (stat(filename, &sbuf) < 0) {
@@ -199,7 +196,14 @@ void process_trans(int fd)
 			"weblet could not run the CGI program");
 	        return;
 	    }
-	    feed_dynamic_get_uri(fd, filename, cgiargs);
+        if (strcasecmp(method, "GET")==0) {
+        feed_dynamic_get_uri(fd, filename, cgiargs);
+        }
+
+	   
+        if (strcasecmp(method, "POST")==0) {
+         feed_dynamic_post_uri(fd, filename, content_length,posstmessage);
+        }
     }
 
 }
