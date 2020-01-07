@@ -3,7 +3,6 @@
 #include <string.h>
 int main(void)
 {
-char *buf,*p;
 char content[4096];
 int a=0,b=0;
 scanf("%d&%d",&a,&b);
