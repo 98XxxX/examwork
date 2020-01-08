@@ -254,7 +254,7 @@ void parse_static_uri(char *uri,char *filename)
     strcpy(filename,".");
     strcat(filename,uri);
     if(uri[strlen(uri)-1]=='/')
-    strcat(filename,"home.html");
+    strcat(filename,"test.html");
 
 }
 /*解析动态请求URL*/
